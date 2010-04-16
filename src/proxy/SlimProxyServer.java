@@ -18,7 +18,6 @@ public class SlimProxyServer implements SocketServer {
 	private final String localHost = "localhost";
 	public final String SLIM_SERVER_VERSION = "Slim -- V0.1";
 
-	@Override
 	public void serve(Socket s) {
 		try {
 			writer = new BufferedWriter(new OutputStreamWriter(s
