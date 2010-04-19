@@ -4,7 +4,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.logging.Level;
 
+import util.SlimIO;
 import util.StreamReader;
 
 public class SlimProxyClient {
@@ -48,21 +50,15 @@ public class SlimProxyClient {
 
 	public String invokeAndGetResponse(String instruction)
 		throws NumberFormatException, Exception {
-		writeString(instruction);
-		System.out.println("To Slim: " + instruction);
+		SlimIO.writeString(writer, instruction);
+		SlimProxyService.logger.log(Level.FINE, "To Slim: " + instruction);
 		int instructionLength = Integer.parseInt(reader.read(6));
 		reader.read(1);
 		return reader.read(instructionLength);
 	}
-	
-	public void sendBye() throws Exception {
-		writeString("bye");
-	}
 
-	private void writeString(String string) throws IOException {
-		writer.write(String.format("%06d:%s",
-				string.getBytes("UTF-8").length, string));
-		writer.flush();
+	public void sendBye() throws Exception {
+		SlimIO.writeString(writer, "bye");
 	}
 
 	public void close() throws Exception {
